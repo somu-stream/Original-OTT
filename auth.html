@@ -406,7 +406,6 @@
       <button type="submit" class="submit-btn" style="background: linear-gradient(90deg, #2aa8ff, #ff2fa6);">SIGNUP</button>
     </form>
   </div>
-
   <script>
     const SHEETDB_API_URL = "https://sheetdb.io/api/v1/k1afzqgq002uw";
     const h = new Date().getHours();
@@ -452,7 +451,6 @@
       const box = document.querySelector('.auth-container');
       const loader = document.getElementById('preloader');
       
-      // பட்டன் கிளிக் செய்தவுடன் லோடரை காண்பிக்கவும்
       if (loader) loader.style.display = 'flex';
       
       try {
@@ -461,14 +459,25 @@
             showNotification("Complete security guidelines first!", true); 
             box.classList.add('shake-animation'); 
             setTimeout(()=>box.classList.remove('shake-animation'), 300); 
-            if (loader) loader.style.display = 'none'; // வேலிடேஷன் தப்பினால் லோடரை மறைக்கவும்
+            if (loader) loader.style.display = 'none';
             return; 
           }
           const u = document.querySelector('input[name="signup_username"]').value, m = document.querySelector('input[name="signup_email"]').value, p = document.querySelector('input[name="signup_password"]').value;
           const res = await fetch(SHEETDB_API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({data:[{username:u, email:m, password:p}]}) });
           
-          if (loader) loader.style.display = 'none'; // ரெஸ்பான்ஸ் வந்ததும் லோடரை மறைக்கவும்
-          if (res.ok) { showNotification("Account Initialized!"); switchTab('login'); } else showNotification("Error!", true);
+          if (loader) loader.style.display = 'none';
+          if (res.ok) { 
+            showNotification("Account Initialized!"); 
+            
+            // சைன்-அப் பண்ண உடனே ப்ரொஃபைல் டேட்டாவை மெமரில ஏத்துறோம் சோமு
+            localStorage.setItem('loggedInUser', u);
+            localStorage.setItem('loggedInEmail', m);
+            
+            // அக்கவுண்ட் கிரியேட் ஆனதும் டைரக்டா ஹோம் பக்கத்துக்கே கூட்டிட்டு போயிடும்
+            window.location.replace('home(1).html'); 
+          } else {
+            showNotification("Error!", true);
+          }
         } else {
           const u = document.querySelector('input[name="username"]').value, p = document.querySelector('input[name="password"]').value;
           const res = await fetch(SHEETDB_API_URL);
@@ -478,22 +487,25 @@
           
           if (userFound) { 
             showNotification("Access Granted!"); 
-            window.location.replace('home(1).html'); 
-            // ஹோம் பேஜ் மாறுவதால் லோடரை நிறுத்த தேவையில்லை, அப்படியே ஓப்பனாகி மாறிவிடும்.
+            
+            // லாகின் ஜெயிச்சதும் கூகுள் ஷீட்ல இருந்து வர்ற யூஸர்நேம் மற்றும் ஈமெயிலை சேமிக்கிறோம்[span_2](start_span)[span_2](end_span)
+            localStorage.setItem('loggedInUser', userFound.username);
+            localStorage.setItem('loggedInEmail', userFound.email);
+            
+            window.location.replace('home(1).html');[span_3](start_span)[span_3](end_span)
           } else { 
-            if (loader) loader.style.display = 'none'; // லாகின் தப்பினால் லோடரை மறைக்கவும்
+            if (loader) loader.style.display = 'none';
             showNotification("Invalid Credentials!", true); 
             box.classList.add('shake-animation'); 
             setTimeout(()=>box.classList.remove('shake-animation'), 300); 
           }
         }
       } catch (error) {
-        if (loader) loader.style.display = 'none'; // எர்ரர் ஏதும் வந்தால் லோடரை மறைக்கவும்
+        if (loader) loader.style.display = 'none';
         showNotification("Network Error!", true);
       }
     }
 
-    // பக்கம் திறந்தவுடன் லோடர் 1.5 செகண்டில் தானாக மறைந்து பக்கம் ஓப்பனாகும் ஸ்மார்ட் டைமர்
     setTimeout(() => {
         const preloader = document.getElementById('preloader');
         if (preloader) {
@@ -501,7 +513,6 @@
         }
     }, 1500);
 
-    // 7. Strict Gestures Anti-Zoom Controls Locks
     document.addEventListener('touchstart', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
     let lastTouch = 0;
     document.addEventListener('touchend', function (e) {
@@ -510,7 +521,6 @@
       lastTouch = currentTouch;
     }, { passive: false });
 
-    // 8. Strict Context Inspector Protection Shield Configurations
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', function (e) {
       if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && ['U','S'].includes(e.key))) {
@@ -518,6 +528,6 @@
         return false;
       }
     });
- </script>
+</script>
 </body>
 </html>
