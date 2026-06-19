@@ -600,10 +600,35 @@
     flex-shrink: 0;
   }
   .modal-close-btn:hover { background: rgba(255,47,166,0.15); color: var(--pink); border-color: var(--pink); }
+  /* Custom Toast Neon Style */
+#custom-toast {
+  position: fixed;
+  top: -100px; /* ஆரம்பத்துல ஸ்கிரீனுக்கு மேல மறைஞ்சிருக்கும் */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 20, 30, 0.95);
+  color: var(--text);
+  border: 1px solid var(--pink);
+  box-shadow: 0 0 15px rgba(255, 47, 166, 0.4);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 9999;
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* ஸ்மூத் என்ட்ரி */
+}
+
+#custom-toast.show {
+  top: 30px; /* மெசேஜ் வரும்போது மேல இருந்து 30px கீழ இறங்கும் */
+}
+  
 </style>
 </head>
 <body>
-
+<!-- கஸ்டம் நியான் டோஸ்ட் பாக்ஸ் -->
+<div id="custom-toast">Logged out successfully, சோமு!</div>
+  
 <!-- NAVBAR -->
 <nav>
   <div class="nav-logo" onclick="resetToHome()">SOMUSTREAM</div>
@@ -1209,15 +1234,21 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Logout கொடுத்தா நிஜமாவே அக்கவுண்ட்டை விட்டு வெளில லாகின் பேஜுக்கு கூட்டிட்டு போகும்
+// கஸ்டம் டோஸ்ட் காட்டி லாக் அவுட் பண்ணும் லாஜிக்
 function handleLogout() {
-  // 1. பிரவுசர் மெமரில இருக்குற லாகின் டேட்டாவை அழிக்கிறோம்
+  // 1. பிரவுசர் மெமரிய க்ளியர் பண்றோம்
   localStorage.removeItem('loggedInUser');
   localStorage.removeItem('loggedInEmail');
   
-  // 2. அலர்ட் காட்டிட்டு, அப்படியே auth.html பேஜுக்கு ரீடைரெக்ட் பண்றோம்
-  alert("Logged out successfully, சோமு!");
-  window.location.replace('auth.html'); 
+  // 2. கஸ்டம் டோஸ்ட் பாக்ஸை மேல இருந்து கீழ இறக்குறோம்
+  const toast = document.getElementById('custom-toast');
+  toast.classList.add('show');
+  
+  // 3. 2 செகண்ட் (2000ms) கழிச்சு auth.html பேஜுக்கு கூட்டிட்டு போறோம்
+  setTimeout(() => {
+    toast.classList.remove('show');
+    window.location.replace('auth.html');
+  }, 2000);
 }
 </script>
 </body>
