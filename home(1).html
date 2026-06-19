@@ -607,15 +607,25 @@
 <!-- NAVBAR -->
 <nav>
   <div class="nav-logo" onclick="resetToHome()">SOMUSTREAM</div>
-  <div class="profile-wrapper">
-    <div class="profile-icon">
+  
+  <div class="profile-wrapper" style="position: relative;">
+    <div class="profile-icon" onclick="toggleProfileMenu()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
         <circle cx="12" cy="7" r="4"/>
       </svg>
     </div>
+
+    <div id="profileDropdown" style="display: none; position: absolute; top: 50px; right: 0; background: var(--card); border: 1px solid rgba(255,47,166,0.3); border-radius: 12px; padding: 16px; width: 220px; box-shadow: 0 10px 30px rgba(255,47,166,0.2); z-index: 1000; text-align: left;">
+      <div style="font-size: 11px; color: var(--pink); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">User Profile</div>
+      <div id="profUsername" style="font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Loading...</div>
+      <div id="profEmail" style="font-size: 12px; color: var(--muted); margin-bottom: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Loading...</div>
+      <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px;">
+      <button onclick="handleLogout()" style="width: 100%; padding: 8px; background: rgba(255,47,166,0.1); border: 1px solid var(--pink); color: var(--pink); border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Logout</button>
+    </div>
   </div>
 </nav>
+  
 
 <!-- HERO BANNER -->
 <section class="hero" id="heroBannerSection">
@@ -1171,6 +1181,44 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeModal();
   });
 });
+  /* ===== PROFILES & LOGIN SESSIONS LOGIC ===== */
+
+// 1. ப்ரொஃபைல் ஐகான் கிளிக் பண்ணும்போது மெனுவை காட்ட/மறைக்க
+function toggleProfileMenu() {
+  const menu = document.getElementById('profileDropdown');
+  if (menu.style.display === 'none' || menu.style.display === '') {
+    // auth.html பக்கத்துல இருந்து சேவ் பண்ணின டேட்டாவை இங்க எடுக்குறோம்
+    const uName = localStorage.getItem('loggedInUser') || 'Somu Streamer';
+    const uEmail = localStorage.getItem('loggedInEmail') || 'somu@stream.com';
+    
+    document.getElementById('profUsername').textContent = uName;
+    document.getElementById('profEmail').textContent = uEmail;
+    
+    menu.style.display = 'block';
+  } else {
+    menu.style.display = 'none';
+  }
+}
+
+// 2. மெனுவுக்கு வெளியே யூஸர் எங்க கிளிக் பண்ணினாலும் மெனு தானா க்ளோஸ் ஆகணும்
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('profileDropdown');
+  const icon = document.querySelector('.profile-icon');
+  if (menu && menu.style.display === 'block' && !menu.contains(e.target) && !icon.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+
+// Logout கொடுத்தா நிஜமாவே அக்கவுண்ட்டை விட்டு வெளில லாகின் பேஜுக்கு கூட்டிட்டு போகும்
+function handleLogout() {
+  // 1. பிரவுசர் மெமரில இருக்குற லாகின் டேட்டாவை அழிக்கிறோம்
+  localStorage.removeItem('loggedInUser');
+  localStorage.removeItem('loggedInEmail');
+  
+  // 2. அலர்ட் காட்டிட்டு, அப்படியே auth.html பேஜுக்கு ரீடைரெக்ட் பண்றோம்
+  alert("Logged out successfully, சோமு!");
+  window.location.replace('auth.html'); 
+}
 </script>
 </body>
 </html>
