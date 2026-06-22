@@ -447,7 +447,7 @@
     }
 
     async function handleAuth(e, type) {
-      e.preventDefault();
+        e.preventDefault();
       const box = document.querySelector('.auth-container');
       const loader = document.getElementById('preloader');
       
@@ -469,11 +469,13 @@
           if (res.ok) { 
             showNotification("Account Initialized!"); 
             
-            // சைன்-அப் பண்ண உடனே ப்ரொஃபைல் டேட்டாவை மெமரில ஏத்துறோம் சோமு
             localStorage.setItem('loggedInUser', u);
             localStorage.setItem('loggedInEmail', m);
             
-            // அக்கவுண்ட் கிரியேட் ஆனதும் டைரக்டா ஹோம் பக்கத்துக்கே கூட்டிட்டு போயிடும்
+            // --- UPDATED: Welcome Toast-kku sign-up status ---
+            localStorage.setItem('userStatus', 'new');
+            localStorage.setItem('username', u);
+            
             window.location.replace('home(1).html'); 
           } else {
             showNotification("Error!", true);
@@ -488,11 +490,14 @@
           if (userFound) { 
             showNotification("Access Granted!"); 
             
-            // லாகின் ஜெயிச்சதும் கூகுள் ஷீட்ல இருந்து வர்ற யூஸர்நேம் மற்றும் ஈமெயிலை சேமிக்கிறோம்[span_2](start_span)[span_2](end_span)
             localStorage.setItem('loggedInUser', userFound.username);
             localStorage.setItem('loggedInEmail', userFound.email);
             
-            window.location.replace('home(1).html');[span_3](start_span)[span_3](end_span)
+            // --- UPDATED: Welcome Toast-kku login status ---
+            localStorage.setItem('userStatus', 'login');
+            localStorage.setItem('username', userFound.username);
+            
+            window.location.replace('home(1).html');
           } else { 
             if (loader) loader.style.display = 'none';
             showNotification("Invalid Credentials!", true); 
@@ -505,13 +510,7 @@
         showNotification("Network Error!", true);
       }
     }
-
-    setTimeout(() => {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.style.display = 'none';
-        }
-    }, 1500);
+    
 
     document.addEventListener('touchstart', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
     let lastTouch = 0;
