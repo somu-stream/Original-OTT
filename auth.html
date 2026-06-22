@@ -446,7 +446,7 @@
       basePasswordValid = l && n && s;
     }
 
-    async function handleAuth(e, type) {
+        async function handleAuth(e, type) {
       e.preventDefault();
       const box = document.querySelector('.auth-container');
       const loader = document.getElementById('preloader');
@@ -454,68 +454,55 @@
       if (loader) loader.style.display = 'flex';
       
       try {
+        const res = await fetch(SHEETDB_API_URL);
+        const data = await res.json();
+
         if (type === 'signup') {
           if (!basePasswordValid) { 
-            showNotification("Complete security guidelines first!", true); 
-            box.classList.add('shake-animation'); 
-            setTimeout(()=>box.classList.remove('shake-animation'), 300); 
-            if (loader) loader.style.display = 'none';
-            return; 
+            throw new Error("Complete security guidelines first!");
           }
           const u = document.querySelector('input[name="signup_username"]').value;
           const m = document.querySelector('input[name="signup_email"]').value;
           const p = document.querySelector('input[name="signup_password"]').value;
           
-          // 1. Email check logic
-          const checkRes = await fetch(SHEETDB_API_URL);
-          const existingData = await checkRes.json();
-          const emailExists = existingData.find(x => x.email === m);
-
-          if (emailExists) {
-            if (loader) loader.style.display = 'none';
-            showNotification("Already exists, please login", true);
-            box.classList.add('shake-animation');
-            setTimeout(()=>box.classList.remove('shake-animation'), 300);
-            return;
+          if (data.find(x => x.email === m)) {
+            throw new Error("Already exists, please login");
           }
 
-          // 2. Signup process
-          const res = await fetch(SHEETDB_API_URL, { 
+          const addRes = await fetch(SHEETDB_API_URL, { 
             method: 'POST', 
             headers: {'Content-Type': 'application/json'}, 
             body: JSON.stringify({data:[{username:u, email:m, password:p}]}) 
           });
           
-          if (loader) loader.style.display = 'none';
-          if (res.ok) { 
-            showNotification("Account Initialized!"); 
-            localStorage.setItem('loggedInUser', u);
-            localStorage.setItem('loggedInEmail', m);
-            window.location.replace('home(1).html'); 
-          } else {
-            showNotification("Error!", true);
-          }
+          if (!addRes.ok) throw new Error("Signup failed");
+          
+          localStorage.setItem('loggedInUser', u);
+          localStorage.setItem('loggedInEmail', m);
+          window.location.replace('home(1).html'); 
+        
         } else {
-          // Login logic
           const u = document.querySelector('input[name="username"]').value;
           const p = document.querySelector('input[name="password"]').value;
-          const res = await fetch(SHEETDB_API_URL);
-          const data = await res.json();
           
           const userFound = data.find(x => (x.username === u || x.email === u) && x.password === p);
           
           if (userFound) { 
-            showNotification("Access Granted!"); 
             localStorage.setItem('loggedInUser', userFound.username);
             localStorage.setItem('loggedInEmail', userFound.email);
             window.location.replace('home(1).html');
           } else { 
-            if (loader) loader.style.display = 'none';
-            showNotification("Invalid Credentials!", true); 
-            box.classList.add('shake-animation'); 
-            setTimeout(()=>box.classList.remove('shake-animation'), 300); 
+            throw new Error("Invalid Credentials!");
           }
         }
+      } catch (error) {
+        if (loader) loader.style.display = 'none';
+        showNotification(error.message, true);
+        box.classList.add('shake-animation');
+        setTimeout(() => box.classList.remove('shake-animation'), 300);
+      }
+        }
+
       } catch (error) {
         if (loader) loader.style.display = 'none';
         showNotification("Network Error!", true);
