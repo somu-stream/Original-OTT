@@ -598,6 +598,9 @@
 
 
       } catch (error) {
+        console.log("Error details:", err); // Idhu ungalukku exact error ennanu sollum
+    loader.style.display = 'none';      // Ithu loader-a force-ah off pannum
+    showNotification("Error: " + err.message, true);
         if (loader) loader.style.display = 'none';
         showNotification("Network Error!", true);
       }
