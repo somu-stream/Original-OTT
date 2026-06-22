@@ -651,14 +651,16 @@
 @keyframes spin { to { transform: rotate(360deg); } }
   .toast {
   position: fixed; top: 20px; right: 20px;
-  background: var(--surface); color: var(--text);
+  background: #111122; color: #f0f0ff;
   padding: 12px 24px; border-radius: 8px;
-  border-left: 4px solid var(--pink);
+  border-left: 4px solid #ff2fa6;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  transform: translateX(120%); transition: transform 0.5s ease;
-  z-index: 10000; font-size: 14px;
+  transform: translateX(120%); 
+  transition: transform 0.5s ease;
+  z-index: 10000; font-family: 'Poppins', sans-serif;
 }
 .toast.show { transform: translateX(0); }
+  
   
 </style>
 </head>
@@ -858,27 +860,29 @@
 </div>
 <div id="toast-message" class="toast"></div>
   
+  
 <script>
-  function showToast(message) {
+function showToast(message) {
   const toast = document.getElementById('toast-message');
   toast.textContent = message;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3000); // 3 seconds-kku aprom mariyum
+  setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// Check panni welcome message katturathu
+// Logic: Login/Signup status-ai check panni message kattum
 window.addEventListener('DOMContentLoaded', () => {
-  const userStatus = localStorage.getItem('userStatus'); // 'login' or 'new'
+  const userStatus = localStorage.getItem('userStatus'); 
   const username = localStorage.getItem('username') || 'User';
 
   if (userStatus === 'login') {
     showToast(`Welcome back, ${username}!`);
-    localStorage.removeItem('userStatus'); // Oru thadava mattum kattum
+    localStorage.removeItem('userStatus'); 
   } else if (userStatus === 'new') {
     showToast(`Welcome to Somu Stream, ${username}!`);
     localStorage.removeItem('userStatus');
   }
 });
+
   
   window.addEventListener('load', () => {
   const loader = document.getElementById('page-loader');
