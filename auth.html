@@ -446,7 +446,7 @@
       basePasswordValid = l && n && s;
     }
 
-        async function handleAuth(e, type) {
+    async function handleAuth(e, type) {
       e.preventDefault();
       const box = document.querySelector('.auth-container');
       const loader = document.getElementById('preloader');
@@ -457,7 +457,7 @@
         const res = await fetch(SHEETDB_API_URL);
         const data = await res.json();
 
-                if (type === 'signup') {
+        if (type === 'signup') {
           if (!basePasswordValid) { 
             throw new Error("Complete security guidelines first!");
           }
@@ -465,16 +465,8 @@
           const m = document.querySelector('input[name="signup_email"]').value;
           const p = document.querySelector('input[name="signup_password"]').value;
           
-          // Username and Email irukka nu check panrom
-          const userExists = data.find(x => x.username === u);
-          const emailExists = data.find(x => x.email === m);
-
-          if (userExists && emailExists) {
-            throw new Error("Both Username and Email already exists!");
-          } else if (userExists) {
-            throw new Error("Username already exists!");
-          } else if (emailExists) {
-            throw new Error("Email already exists, please login");
+          if (data.find(x => x.email === m)) {
+            throw new Error("Already exists, please login");
           }
 
           const addRes = await fetch(SHEETDB_API_URL, { 
@@ -488,8 +480,8 @@
           localStorage.setItem('loggedInUser', u);
           localStorage.setItem('loggedInEmail', m);
           window.location.replace('home(1).html'); 
-        }
-       else {
+        
+        } else {
           const u = document.querySelector('input[name="username"]').value;
           const p = document.querySelector('input[name="password"]').value;
           
@@ -509,7 +501,8 @@
         box.classList.add('shake-animation');
         setTimeout(() => box.classList.remove('shake-animation'), 300);
       }
-        }
+    }
+
 
       } catch (error) {
         if (loader) loader.style.display = 'none';
