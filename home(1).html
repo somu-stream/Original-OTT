@@ -96,6 +96,21 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     filter: drop-shadow(0 0 12px var(--pink-glow)); cursor: pointer;
   }
+  .logo-text {
+    /* Gradient background */
+    background: linear-gradient(90deg, #ff2fa6, #2aa8ff, #ff2fa6);
+    background-size: 200% auto;
+    /* Clipping the background to text */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* Animation */
+    animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
 
   .search-container {
     padding: 0 5vw;
@@ -626,7 +641,8 @@
 <div id="custom-toast">Logged out successfully!</div>
 <!-- NAVBAR -->
 <nav>
-  <div class="nav-logo" onclick="resetToHome()">SOMUSTREAM</div>
+  <div class="nav-logo logo-text" onclick="resetToHome()">SOMUSTREAM</div>
+  
   
   <div class="profile-wrapper" style="position: relative;">
     <div class="profile-icon" onclick="toggleProfileMenu()">
