@@ -454,7 +454,7 @@
       if (loader) loader.style.display = 'flex';
       
       try {
-        if (type === 'signup') {
+                if (type === 'signup') {
           if (!basePasswordValid) { 
             showNotification("Complete security guidelines first!", true); 
             box.classList.add('shake-animation'); 
@@ -462,22 +462,36 @@
             if (loader) loader.style.display = 'none';
             return; 
           }
-          const u = document.querySelector('input[name="signup_username"]').value, m = document.querySelector('input[name="signup_email"]').value, p = document.querySelector('input[name="signup_password"]').value;
+          const u = document.querySelector('input[name="signup_username"]').value;
+          const m = document.querySelector('input[name="signup_email"]').value;
+          const p = document.querySelector('input[name="signup_password"]').value;
+          
+          // Check if email already exists
+          const checkRes = await fetch(SHEETDB_API_URL);
+          const existingData = await checkRes.json();
+          const emailExists = existingData.find(x => x.email === m);
+
+          if (emailExists) {
+            if (loader) loader.style.display = 'none';
+            showNotification("Already exists, please login", true);
+            box.classList.add('shake-animation');
+            setTimeout(()=>box.classList.remove('shake-animation'), 300);
+            return;
+          }
+
           const res = await fetch(SHEETDB_API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({data:[{username:u, email:m, password:p}]}) });
           
           if (loader) loader.style.display = 'none';
           if (res.ok) { 
             showNotification("Account Initialized!"); 
-            
-            // சைன்-அப் பண்ண உடனே ப்ரொஃபைல் டேட்டாவை மெமரில ஏத்துறோம் சோமு
             localStorage.setItem('loggedInUser', u);
             localStorage.setItem('loggedInEmail', m);
-            
-            // அக்கவுண்ட் கிரியேட் ஆனதும் டைரக்டா ஹோம் பக்கத்துக்கே கூட்டிட்டு போயிடும்
             window.location.replace('home(1).html'); 
           } else {
             showNotification("Error!", true);
           }
+        }
+
         } else {
           const u = document.querySelector('input[name="username"]').value, p = document.querySelector('input[name="password"]').value;
           const res = await fetch(SHEETDB_API_URL);
