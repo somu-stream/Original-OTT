@@ -650,16 +650,26 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
   .toast {
-  position: fixed; top: 20px; right: 20px;
-  background: #111122; color: #f0f0ff;
-  padding: 12px 24px; border-radius: 8px;
+  position: fixed; 
+  top: 20px; 
+  right: 20px; /* Ithu valadhu pakkathula irukkum */
+  background: #111122; 
+  color: #f0f0ff;
+  padding: 12px 24px; 
+  border-radius: 8px;
   border-left: 4px solid #ff2fa6;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  transform: translateX(120%); 
-  transition: transform 0.5s ease;
-  z-index: 10000; font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.8); /* Shadow-ai innum dark aakiten */
+  transform: translateX(150%); /* Start position */
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth animation */
+  z-index: 999999; /* Z-index-ai romba high-aakiten, ippo profile-ku mela varum */
+  font-family: 'Poppins', sans-serif;
+  pointer-events: none; /* User click pannalana screen-a block pannathu */
 }
-.toast.show { transform: translateX(0); }
+
+.toast.show { 
+  transform: translateX(0); /* Valadhu pakkathula irundhu ulla varum */
+}
+  
   
   
 </style>
