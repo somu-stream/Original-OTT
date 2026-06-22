@@ -8,32 +8,125 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
-    /* 1. Core Cyber Void Design Grid Space */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif !important;
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif !important; }
+    body { width: 100%; height: 100vh; height: 100dvh; overflow: hidden; background-color: #050811; 
+      background-image: radial-gradient(at 0% 0%, rgba(255, 47, 166, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(42, 168, 255, 0.12) 0px, transparent 50%);
+      display: flex; justify-content: center; align-items: center; padding: 20px; user-select: none; }
+    body::after { content: " "; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%); z-index: 1; background-size: 100% 3px; pointer-events: none; }
+    .auth-container { position: relative; width: 100%; max-width: 380px; padding: 35px 25px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; backdrop-filter: blur(15px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); z-index: 5; }
+    .auth-container::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, #ff2fa6, #2aa8ff); border-radius: 22px; z-index: -1; opacity: 0.15; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    .shake-animation { animation: shake 0.3s ease-in-out; }
+    .brand-section { text-align: center; margin-bottom: 25px; }
+    .brand-section h1 { font-size: 24px; font-weight: 600; color: #2aa8ff; letter-spacing: 1.5px; text-transform: uppercase; }
+    .brand-section h1 span { color: #ff2fa6; }
+    .tab-control { display: flex; background: rgba(0, 0, 0, 0.3); border-radius: 10px; margin-bottom: 20px; padding: 5px; }
+    .tab-btn { flex: 1; padding: 12px 10px; background: transparent; border: none; color: rgba(255, 255, 255, 0.6); font-size: 13px; cursor: pointer; font-weight: 600; border-radius: 8px; transition: all 0.3s ease; }
+    .tab-btn.active { color: #fff; background: linear-gradient(135deg, rgba(255, 47, 166, 0.3), rgba(42, 168, 255, 0.3)); }
+    .form-box { display: none; } .form-box.active { display: block; }
+    .input-group { position: relative; margin-bottom: 15px; }
+    .input-group input { width: 100%; padding: 14px 45px 14px 15px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+    .eye-toggle-trigger { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; background: transparent; border: none; cursor: pointer; }
+    .eye-toggle-trigger svg { width: 100%; height: 100%; fill: rgba(255, 255, 255, 0.4); }
+    .psw-validator-panel { margin-top: -5px; margin-bottom: 15px; padding: 12px; background: rgba(0, 0, 0, 0.25); border-radius: 8px; display: none; }
+    .validation-rule { font-size: 11px; color: rgba(255, 255, 255, 0.4); display: flex; align-items: center; margin-bottom: 6px; }
+    .validation-rule.valid { color: #2aa8ff; }
+    .submit-btn { width: 100%; padding: 14px; background: linear-gradient(90deg, #ff2fa6, #2aa8ff); border: none; border-radius: 8px; color: #fff; font-weight: 600; text-transform: uppercase; cursor: pointer; }
+    #notification-toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.9); color: #fff; padding: 12px 25px; border-radius: 50px; z-index: 999; transition: top 0.5s; text-align: center; }
+    #notification-toast.show { top: 20px; }
+    .custom-loader-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050811; z-index: 99999; display: none; justify-content: center; align-items: center; }
+    .neon-ring { width: 45px; height: 45px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.05); border-top-color: #ff007f; border-bottom-color: #00b0ff; animation: spin-loader 0.8s linear infinite; }
+    @keyframes spin-loader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="custom-loader-screen" id="preloader"><div class="neon-ring"></div></div>
+  <div id="notification-toast"></div>
+
+  <div class="auth-container">
+    <div class="brand-section">
+      <p id="greeting-msg" style="color: rgba(255,255,255,0.4); font-size: 11px; margin-bottom: 6px;"></p>
+      <h1>Somu<span>Stream</span></h1>
+    </div>
+    <div class="tab-control">
+      <button class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
+      <button class="tab-btn" onclick="switchTab('signup')">SIGN UP</button>
+    </div>
+
+    <form id="login-form" class="form-box active" onsubmit="return handleAuth(event, 'login')">
+      <div class="input-group"><input type="text" name="username" placeholder="Username / Email" required></div>
+      <div class="input-group"><input type="password" id="login-pass" name="password" placeholder="Password" required></div>
+      <button type="submit" class="submit-btn">LOGIN</button>
+    </form>
+
+    <form id="signup-form" class="form-box" onsubmit="return handleAuth(event, 'signup')">
+      <div class="input-group"><input type="text" name="signup_username" placeholder="Create Username" required></div>
+      <div class="input-group"><input type="email" name="signup_email" placeholder="Email Address" required></div>
+      <div class="input-group"><input type="password" id="signup-pass" name="signup_password" placeholder="Secure Password" required onfocus="showValidator()" oninput="validatePassword()"></div>
+      <div class="psw-validator-panel" id="validator-box">
+        <div class="validation-rule" id="rule-length">Min 8 Characters</div>
+        <div class="validation-rule" id="rule-number">Contains 1 Number</div>
+        <div class="validation-rule" id="rule-special">Contains Special Character</div>
+      </div>
+      <button type="submit" class="submit-btn">SIGNUP</button>
+    </form>
+  </div>
+
+  <script>
+    const SHEETDB_API_URL = "https://sheetdb.io/api/v1/k1afzqgq002uw";
+    function showNotification(msg, isErr = false) {
+      const t = document.getElementById('notification-toast');
+      t.innerText = msg; t.style.background = isErr ? "rgba(255, 47, 47, 0.9)" : "rgba(42, 168, 255, 0.9)";
+      t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+    }
+    function switchTab(t) {
+      document.getElementById('login-form').className = t === 'login' ? 'form-box active' : 'form-box';
+      document.getElementById('signup-form').className = t === 'signup' ? 'form-box active' : 'form-box';
+    }
+    let basePasswordValid = false;
+    function showValidator() { document.getElementById('validator-box').style.display = 'block'; }
+    function validatePassword() {
+      const v = document.getElementById('signup-pass').value;
+      const l = v.length >= 8, n = /[0-9]/.test(v), s = /[@$!%*?&]/.test(v);
+      document.getElementById('rule-length').className = l ? 'validation-rule valid' : 'validation-rule';
+      document.getElementById('rule-number').className = n ? 'validation-rule valid' : 'validation-rule';
+      document.getElementById('rule-special').className = s ? 'validation-rule valid' : 'validation-rule';
+      basePasswordValid = l && n && s;
     }
 
-    body {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh; 
-      overflow: hidden;
-      background-color: #050811; 
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(255, 47, 166, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(42, 168, 255, 0.12) 0px, transparent 50%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
+    async function handleAuth(e, type) {
+      e.preventDefault();
+      const loader = document.getElementById('preloader');
+      loader.style.display = 'flex';
+      try {
+        const res = await fetch(SHEETDB_API_URL);
+        const data = await res.json();
+        if (type === 'signup') {
+          if (!basePasswordValid) throw new Error("Complete security guidelines first!");
+          const u = document.querySelector('input[name="signup_username"]').value;
+          const m = document.querySelector('input[name="signup_email"]').value;
+          const p = document.querySelector('input[name="signup_password"]').value;
+          const userExists = data.find(x => x.username === u);
+          const emailExists = data.find(x => x.email === m);
+          if (userExists && emailExists) throw new Error("Both Username and Email already exists!");
+          if (userExists) throw new Error("Username already exists!");
+          if (emailExists) throw new Error("Email already exists, please login");
+          const addRes = await fetch(SHEETDB_API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({data:[{username:u, email:m, password:p}]}) });
+          if (!addRes.ok) throw new Error("Signup failed");
+          localStorage.setItem('loggedInUser', u); localStorage.setItem('loggedInEmail', m);
+          window.location.replace('home(1).html');
+        } else {
+          const u = document.querySelector('input[name="username"]').value;
+          const p = document.querySelector('input[name="password"]').value;
+          const userFound = data.find(x => (x.username === u || x.email === u) && x.password === p);
+          if (userFound) { localStorage.setItem('loggedInUser', userFound.username); localStorage.setItem('loggedInEmail', userFound.email); window.location.replace('home(1).html'); }
+          else throw new Error("Invalid Credentials!");
+        }
+      } catch (err) { loader.style.display = 'none'; showNotification(err.message, true); }
+    }
+  </script>
+</body>
+</html>
       -webkit-tap-highlight-color: transparent;
     }
 
