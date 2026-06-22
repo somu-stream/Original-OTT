@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SomuStream - Authentication </title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* 1. Core Cyber Void Design Grid Space */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif !important;
+    }
+
+    body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh; 
+      overflow: hidden;
+      background-color: #050811; 
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 47, 166, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(42, 168, 255, 0.12) 0px, transparent 50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body::after {
+      content: " ";
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%);
+      z-index: 1;
+      background-size: 100% 3px;
+      pointer-events: none;
+    }
+
+    /* 2. Glassmorphic Micro-Fluid Panel Wrapper */
+    .auth-container {
+      position: relative;
+      width: 100%;
+      max-width: 380px; 
+      padding: 35px 25px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      z-index: 5;
+    }
+
+    .auth-container::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      background: linear-gradient(45deg, #ff2fa6, #2aa8ff);
+      border-radius: 22px;
+      z-index: -1;
+      opacity: 0.15;
+    }
+
+    /* Dynamic Shake Intercept Matrix Animation Layer */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .shake-animation {
+      animation: shake 0.3s ease-in-out;
+    }
+
+    .brand-section {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand-section h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #2aa8ff;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-shadow: 0 0 15px rgba(42, 168, 255, 0.65), 0 0 30px rgba(42, 168, 255, 0.3);
+    }
+
+    .brand-section h1 span {
+      color: #ff2fa6;
+      text-shadow: 0 0 15px rgba(255, 47, 166, 0.65), 0 0 30px rgba(255, 47, 166, 0.3);
+    }
+
+    .tab-control {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      padding: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 10px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(255, 47, 166, 0.3), rgba(42, 168, 255, 0.3));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+
+    .form-box {
+      display: none;
+    }
+
+    .form-box.active {
+      display: block;
+    }
+
+    /* 3. Embedded Secure Input Modules */
+    .input-group {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 45px 14px 15px; 
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      -webkit-appearance: none;
+    }
+
+    .input-group input:focus {
+      border-color: #2aa8ff;
+      box-shadow: 0 0 12px rgba(42, 168, 255, 0.3);
+    }
+
+    #signup-form .input-group input:focus {
+      border-color: #ff2fa6;
+      box-shadow: 0 0 12px rgba(255, 47, 166, 0.3);
+    }
+
+    /* Embedded Inline Professional View Toggles */
+    .eye-toggle-trigger {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .eye-toggle-trigger svg {
+      width: 100%;
+      height: 100%;
+      fill: rgba(255, 255, 255, 0.4);
+      transition: fill 0.3s ease, filter 0.3s ease;
+    }
+
+    #login-form .eye-toggle-trigger:hover svg, 
+    #login-form .eye-toggle-trigger.active svg {
+      fill: #2aa8ff;
+      filter: drop-shadow(0 0 5px rgba(42, 168, 255, 0.6));
+    }
+
+    #signup-form .eye-toggle-trigger:hover svg, 
+    #signup-form .eye-toggle-trigger.active svg {
+      fill: #ff2fa6;
+      filter: drop-shadow(0 0 5px rgba(255, 47, 166, 0.6));
+    }
+
+    /* Chrome Autofill Shadow Fix Patch Overlay */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 1000px rgba(5, 8, 17, 0.95) inset !important;
+      -webkit-text-fill-color: #ffffff !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* 4. Password Policy Rule Matrix Tracker Layout */
+    .psw-validator-panel {
+      margin-top: -5px;
+      margin-bottom: 15px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      display: none;
+    }
+
+    .validation-rule {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .validation-rule:last-child {
+      margin-bottom: 0;
+    }
+
+    .validation-rule::before {
+      content: '✕';
+      display: inline-block;
+      width: 14px;
+      color: #ff2fa6;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .validation-rule.valid {
+      color: #2aa8ff;
+      text-shadow: 0 0 8px rgba(42, 168, 255, 0.3);
+    }
+
+    .validation-rule.valid::before {
+      content: '✓';
+      color: #00ffaa;
+    }
+
+    /* 5. Interface Premium Core Buttons */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #ff2fa6, #2aa8ff);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      margin-top: 5px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      -webkit-appearance: none;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    @media (max-width: 400px) {
+      body { padding: 15px; }
+      .auth-container { padding: 30px 20px; border-radius: 16px; }
+      .brand-section h1 { font-size: 22px; }
+      .input-group input, .submit-btn { padding: 12px 14px; font-size: 13px; }
+      .input-group input { padding-right: 40px; }
+    }
+
+    @media (max-height: 600px) {
+      .auth-container { padding: 20px 20px; }
+      .brand-section { margin-bottom: 15px; }
+    }
+
+    /* Notification Toast Overlay */
+    #notification-toast {
+      position: fixed;
+      top: -100px; /* Hidden state */
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      padding: 12px 25px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      z-index: 999;
+      font-size: 14px;
+      font-weight: 500;
+      transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    #notification-toast.show {
+      top: 20px; /* Visible state */
+    }
+
+    /* Full Screen Overlay for Loader */
+    .custom-loader-screen {
+        position: fixed; /* Fixed potta thaan auth content munnadi mothama maraikkum */
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%;
+        background: #050811; /* Background cyber black aakkan */
+        z-index: 99999; /* Ellathinu mukalilum kaanikkan */
+        display: flex; /* Default-ah open-la flex-ah irukum */
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Neon Pink x Blue Ring Style */
+    .neon-ring {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.05);
+        border-top-color: #ff007f;   /* Neon Pink */
+        border-bottom-color: #00b0ff;/* Cyber Blue */
+        animation: spin-loader 0.8s linear infinite;
+    }
+
+    /* Ring Thirinju Kondirikkaanulla Animation */
+    @keyframes spin-loader {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="custom-loader-screen" id="preloader">
+    <div class="neon-ring"></div>
+  </div>
+
+  <div id="notification-toast"></div>
+
+  <div class="auth-container">
+    <div class="brand-section">
+      <p id="greeting-msg" style="color: rgba(255,255,255,0.4); font-size: 11px; margin-bottom: 6px; font-weight: 600; letter-spacing: 0.5px;"></p>
+      <h1>Somu<span>Stream</span></h1>
+    </div>
+
+    <div class="tab-control">
+      <button class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
+      <button class="tab-btn" onclick="switchTab('signup')">SIGN UP</button>
+    </div>
+
+    <form id="login-form" class="form-box active" method="POST" action="home(1).html" onsubmit="return handleAuth(event, 'login')">
+      <div class="input-group">
+        <input type="text" name="username" placeholder="Username / Email" required autocomplete="username">
+      </div>
+      <div class="input-group">
+        <input type="password" id="login-pass" name="password" placeholder="Password" required autocomplete="current-password">
+        <button type="button" class="eye-toggle-trigger" onclick="togglePasswordVisibility('login-pass', this)">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+        </button>
+      </div>
+      <button type="submit" class="submit-btn">LOGIN</button>
+    </form>
+
+    <form id="signup-form" class="form-box" method="POST" action="auth.html" onsubmit="return handleAuth(event, 'signup')">
+      <div class="input-group">
+        <input type="text" name="signup_username" placeholder="Create Username" required autocomplete="username">
+      </div>
+      <div class="input-group">
+        <input type="email" name="signup_email" placeholder="Email Address" required autocomplete="email">
+      </div>
+      <div class="input-group">
+        <input type="password" id="signup-pass" name="signup_password" placeholder="Secure Password" required autocomplete="new-password" onfocus="showValidator()" oninput="validatePassword()">
+        <button type="button" class="eye-toggle-trigger" onclick="togglePasswordVisibility('signup-pass', this)">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="psw-validator-panel" id="validator-box">
+        <div class="validation-rule" id="rule-length">Min 8 Characters</div>
+        <div class="validation-rule" id="rule-number">Contains 1 Number (0-9)</div>
+        <div class="validation-rule" id="rule-special">Contains Special Character (@,$,!,%,*,?,&)</div>
+      </div>
+
+      <button type="submit" class="submit-btn" style="background: linear-gradient(90deg, #2aa8ff, #ff2fa6);">SIGNUP</button>
+    </form>
+  </div>
+  <script>
+    const SHEETDB_API_URL = "https://sheetdb.io/api/v1/k1afzqgq002uw";
+    const h = new Date().getHours();
+    document.getElementById('greeting-msg').innerText = `SYSTEM STATUS // ${h < 12 ? "GOOD MORNING" : h < 18 ? "GOOD AFTERNOON" : "GOOD EVENING"}`;
+
+    function showNotification(msg, isErr = false) {
+      const t = document.getElementById('notification-toast');
+      t.innerText = msg;
+      t.style.background = isErr ? "rgba(255, 47, 47, 0.9)" : "rgba(42, 168, 255, 0.9)";
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function switchTab(t) {
+      document.getElementById('login-form').className = t === 'login' ? 'form-box active' : 'form-box';
+      document.getElementById('signup-form').className = t === 'signup' ? 'form-box active' : 'form-box';
+      document.querySelectorAll('.tab-btn').forEach((b, i) => b.className = (i === (t === 'login' ? 0 : 1)) ? 'tab-btn active' : 'tab-btn');
+    }
+
+    function togglePasswordVisibility(id, btn) {
+      const i = document.getElementById(id);
+      const isPassword = i.type === "password";
+      i.type = isPassword ? "text" : "password";
+      btn.querySelector('svg path').setAttribute('d', isPassword ?
+        "M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" :
+        "M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+      );
+    }
+
+    let basePasswordValid = false;
+    function showValidator() { document.getElementById('validator-box').style.display = 'block'; }
+    function validatePassword() {
+      const v = document.getElementById('signup-pass').value;
+      const l = v.length >= 8, n = /[0-9]/.test(v), s = /[@$!%*?&]/.test(v);
+      document.getElementById('rule-length').className = l ? 'validation-rule valid' : 'validation-rule';
+      document.getElementById('rule-number').className = n ? 'validation-rule valid' : 'validation-rule';
+      document.getElementById('rule-special').className = s ? 'validation-rule valid' : 'validation-rule';
+      basePasswordValid = l && n && s;
+    }
+
+    async function handleAuth(e, type) {
+      e.preventDefault();
+      const box = document.querySelector('.auth-container');
+      const loader = document.getElementById('preloader');
+      
+      if (loader) loader.style.display = 'flex';
+      
+      try {
+        if (type === 'signup') {
+          if (!basePasswordValid) { 
+            showNotification("Complete security guidelines first!", true); 
+            box.classList.add('shake-animation'); 
+            setTimeout(()=>box.classList.remove('shake-animation'), 300); 
+            if (loader) loader.style.display = 'none';
+            return; 
+          }
+          const u = document.querySelector('input[name="signup_username"]').value, m = document.querySelector('input[name="signup_email"]').value, p = document.querySelector('input[name="signup_password"]').value;
+          const res = await fetch(SHEETDB_API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({data:[{username:u, email:m, password:p}]}) });
+          
+          if (loader) loader.style.display = 'none';
+          if (res.ok) { 
+            showNotification("Account Initialized!"); 
+            
+            // சைன்-அப் பண்ண உடனே ப்ரொஃபைல் டேட்டாவை மெமரில ஏத்துறோம் சோமு
+            localStorage.setItem('loggedInUser', u);
+            localStorage.setItem('loggedInEmail', m);
+            
+            // அக்கவுண்ட் கிரியேட் ஆனதும் டைரக்டா ஹோம் பக்கத்துக்கே கூட்டிட்டு போயிடும்
+            window.location.replace('home(1).html'); 
+          } else {
+            showNotification("Error!", true);
+          }
+        } else {
+          const u = document.querySelector('input[name="username"]').value, p = document.querySelector('input[name="password"]').value;
+          const res = await fetch(SHEETDB_API_URL);
+          const data = await res.json();
+          
+          const userFound = data.find(x => (x.username === u || x.email === u) && x.password === p);
+          
+          if (userFound) { 
+            showNotification("Access Granted!"); 
+            
+            // லாகின் ஜெயிச்சதும் கூகுள் ஷீட்ல இருந்து வர்ற யூஸர்நேம் மற்றும் ஈமெயிலை சேமிக்கிறோம்[span_2](start_span)[span_2](end_span)
+            localStorage.setItem('loggedInUser', userFound.username);
+            localStorage.setItem('loggedInEmail', userFound.email);
+            
+            window.location.replace('home(1).html');[span_3](start_span)[span_3](end_span)
+          } else { 
+            if (loader) loader.style.display = 'none';
+            showNotification("Invalid Credentials!", true); 
+            box.classList.add('shake-animation'); 
+            setTimeout(()=>box.classList.remove('shake-animation'), 300); 
+          }
+        }
+      } catch (error) {
+        if (loader) loader.style.display = 'none';
+        showNotification("Network Error!", true);
+      }
+    }
+
+    setTimeout(() => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+        }
+    }, 1500);
+
+    document.addEventListener('touchstart', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    let lastTouch = 0;
+    document.addEventListener('touchend', function (e) {
+      const currentTouch = (new Date()).getTime();
+      if (currentTouch - lastTouch <= 300) e.preventDefault();
+      lastTouch = currentTouch;
+    }, { passive: false });
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && ['U','S'].includes(e.key))) {
+        e.preventDefault();
+        return false;
+      }
+    });
+</script>
+</body>
+</html>
