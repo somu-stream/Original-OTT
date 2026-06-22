@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Somu Stream</title>
+<link rel="preload" href="karuppu_b.jpg" as="image" fetchpriority="high">
 <link rel="icon" type="image/png" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,30 +20,25 @@
     --text: #f0f0ff;
     --muted: #6b6b8a;
     --nav-h: 64px;
-    --shimmer-bg: #16162a;
-    --shimmer-glow: #22223b;
   }
 
-  * { 
-    font-family: 'Poppins', sans-serif !important;
-    margin: 0; padding: 0; box-sizing: border-box;
-    -webkit-user-select: none !important; 
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important; 
-    -webkit-touch-callout: none !important; 
-    -webkit-tap-highlight-color: transparent; 
-  }
+  * { font-family: 'Poppins', sans-serif !important; margin: 0; padding: 0; box-sizing: border-box; user-select: none !important; -webkit-tap-highlight-color: transparent; }
 
-  html, body {
-    scroll-behavior: smooth;
-    touch-action: auto; 
-    -webkit-overflow-scrolling: touch; 
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-    width: 100%;
-  }
+  html, body { scroll-behavior: smooth; background: var(--bg); color: var(--text); overflow-x: hidden; width: 100%; }
+
+  .movie-row { display: flex; gap: 14px; overflow-x: auto; padding: 12px 10px; scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none; }
+  .movie-row::-webkit-scrollbar { display: none; }
+
+  /* Aspect Ratio Fixes */
+  .card { flex: 0 0 clamp(130px, 18vw, 200px); aspect-ratio: 2 / 3; position: relative; border-radius: 10px; overflow: hidden; background: var(--card); transition: transform 0.25s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
+  .card-landscape { flex: 0 0 clamp(240px, 30vw, 340px); aspect-ratio: 16 / 9; position: relative; border-radius: 10px; overflow: hidden; background: var(--card); transition: transform 0.25s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
+
+  .card:hover, .card-landscape:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 12px 40px rgba(255, 47, 166, 0.4); z-index: 99; }
+
+  .shimmer-loading { position: absolute; inset: 0; background: linear-gradient(90deg, #0d0d13 25%, rgba(255, 47, 166, 0.08) 50%, #0d0d13 75%); background-size: 200% 100%; animation: neonShimmer 1.4s infinite linear; }
+  @keyframes neonShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+
   
   img { 
     pointer-events: none; 
@@ -894,15 +890,14 @@ function badgeHTML(badge) {
 }
 
 function thumbHTML(movie, isLandscape=false) {
-  return `<div class="card-thumb-wrapper" style="position:absolute; inset:0; width:100%; height:100%; z-index:1;">
-            <div class="shimmer-loading" style="position:absolute; inset:0; z-index:2; width:100%; height:100%;"></div>
-            <img class="card-thumb" src="${movie.thumbnail}" alt="${movie.title}" loading="lazy" draggable="false" 
-                 style="position:absolute; inset:0; width:100%; height:100%; z-index:3; opacity:0; transition:opacity 0.3s ease; object-fit:cover;"
-                 onload="this.style.opacity='1'; this.previousElementSibling.remove();"
-                 onerror="handleImgError(this, '${movie.genre}', '${movie.title}')">
-          </div>
-          <div style="padding-top: ${isLandscape ? '56.25%' : '150%'};"></div>`;
-}
+    return `<div class="card-thumb-wrapper" style="position:absolute; inset:0; width:100%; height:100%; z-index:1;">
+              <div class="shimmer-loading"></div>
+              <img class="card-thumb" src="${movie.thumbnail}" alt="${movie.title}" loading="lazy" draggable="false" 
+                   style="position:absolute; inset:0; width:100%; height:100%; z-index:3; opacity:0; transition:opacity 0.3s ease; object-fit:cover;"
+                   onload="this.style.opacity='1'; this.previousElementSibling.remove();"
+                   onerror="handleImgError(this, '${movie.genre}', '${movie.title}')">
+            </div>`;
+  }
 
 function handleImgError(img, genre, title) {
   const parent = img.parentElement;
