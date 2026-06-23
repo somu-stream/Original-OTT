@@ -345,9 +345,41 @@
             color: var(--blue);
             letter-spacing: 1px;
         }
-        video#myVideo {
-pointer-events: none;
-        }
+        /* Video tag-ai container-kulla correct-aga position seiyungal */
+video#myVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none; /* Native controls-ai click seiyya mudiyadhu */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Overlay-kku keezhe irukkanum */
+}
+
+/* Overlay-ai video-vukku mela kondu varungal */
+.controls-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2; /* Video-vai vida mela irukkanum */
+    pointer-events: auto; /* Buttons click aagum */
+}
+
+/* Footer-ai ella-vatrai-vidavum mela kondu varungal */
+.footer-section {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3; /* Buttons-gal click aagum */
+}
+```[span_2](start_span)[span_2](end_span)
+
+**Kavanikkavendiya matroru vishayam:**
+Ungaloda HTML-il `<video>` tag-il `src="..."` endru ullathu. Athil ungaloda video link-ai correct-aga paste panniyirukkireergala endru confirm pannikollungal[span_3](start_span)[span_3](end_span).
+
+Indha `z-index` (video=1, overlay=2, footer=3) mathangalai seithu vittu, page-ai refresh seiyungal. Ippo video-vai touch seithaal browser-oda native player varadhu, ungaloda custom play button mattumae work aagum[span_4](start_span)[span_4](end_span).
+
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -383,10 +415,13 @@ pointer-events: none;
     </div>
 
         <video id="myVideo" 
-           src="..." 
-           playsinline 
-           controlsList="nodownload nofullscreen noremoteplayback">
-    </video>
+       src="https://s35.cdnserver04.xyz/Moviesda.Mobi_-_Kara_2026_Original_720p_HD_(950_MB).mp4?stream=1" 
+       playsinline 
+       muted 
+       controlsList="nodownload noremoteplayback" 
+       style="width: 100%; height: 100%; object-fit: contain; pointer-events: none;">
+</video>
+
 
 
 
