@@ -345,6 +345,9 @@
             color: var(--blue);
             letter-spacing: 1px;
         }
+        video#myVideo {
+pointer-events: none;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -380,9 +383,10 @@
     </div>
 
         <video id="myVideo" 
-       src="https://s35.cdnserver04.xyz/Moviesda.Mobi_-_Kara_2026_Original_720p_HD_(950_MB).mp4?stream=1" 
-       playsinline>
-</video>
+           src="..." 
+           playsinline 
+           controlsList="nodownload nofullscreen noremoteplayback">
+    </video>
 
 
 
