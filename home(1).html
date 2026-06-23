@@ -829,6 +829,14 @@
     </div>
     <div class="movie-row" id="classicRow"></div>
   </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="section-header">
+      <div class="section-title">Evil Dead Quadrilogy Collections<span class="section-counter" id="evilCount">0</span></div>
+      <a class="section-more" href="javascript:void(0)" onclick="viewAllCategory('evil', 'Evil Dead Quadrilogy Collections', true)">View All →</a>
+    </div>
+    <div class="featured-row" id="evilRow"></div>
+  </section>
   
 </div>
 
@@ -1077,6 +1085,7 @@ function updateCounters(src) {
   document.getElementById('KidsCount').innerText = src.filter(m => m.category === 'kids').length;
   document.getElementById('horrorCount').innerText = src.filter(m => m.category === 'horror').length;
   document.getElementById('classicCount').innerText = src.filter(m => m.category === 'classic').length;
+  document.getElementById('evilCount').innerText = src.filter(m => m.category === 'evil').length;
 }
 
 function renderRows(list) {
@@ -1093,7 +1102,7 @@ function renderRows(list) {
     document.getElementById('KidsRow').innerHTML  = src.filter(m=>m.category==='kids').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
     document.getElementById('horrorRow').innerHTML  = src.filter(m=>m.category==='horror').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
     document.getElementById('classicRow').innerHTML  = src.filter(m=>m.category==='classic').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
-    
+    document.getElementById('evilRow').innerHTML  = src.filter(m=>m.category==='evil').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
     
   } else {
     const gridContainer = document.getElementById('viewAllGridContainer');
