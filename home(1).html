@@ -1368,6 +1368,33 @@ function handleLogout() {
     window.location.replace('auth.html');
   }, 2000);
 }
+  const observerOptions = {
+  threshold: 0.1 
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    // செக்‌ஷன் ஸ்க்ரீனுக்குள் வரும்போது
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = "1";
+      entry.target.style.transform = "translateY(0)";
+    } 
+    // செக்‌ஷன் ஸ்க்ரீனை விட்டு வெளியே செல்லும்போது பழைய நிலைக்குத் திரும்ப
+    else {
+      entry.target.style.opacity = "0";
+      entry.target.style.transform = "translateY(30px)";
+    }
+  });
+}, observerOptions);
+
+// அனிமேஷன் தேவைப்படும் செக்‌ஷன்கள்
+document.querySelectorAll('.section').forEach(section => {
+  section.style.opacity = "0";
+  section.style.transform = "translateY(30px)";
+  section.style.transition = "all 0.6s ease-out"; // ஸ்மூத் அனிமேஷன்
+  observer.observe(section);
+});
+
 </script>
 </body>
 </html>
