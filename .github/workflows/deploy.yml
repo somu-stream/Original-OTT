@@ -3,15 +3,18 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: ''  # Ithai blank-ah vidunga
-          firebaseToken: '${{ secrets.FIREBASE_TOKEN }}' # Ithu dhaan ippo main
-          channelId: live
-          projectId: somustream-95d00
+      
+      # Inga thaan namma custom command-ai poduvom
+      - name: Deploy to Firebase
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOMUSTREAM }}
+        run: |
+          echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service-account.json
+          export GOOGLE_APPLICATION_CREDENTIALS=service-account.json
+          npx firebase-tools deploy --only hosting --project somustream-95d00
