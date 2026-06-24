@@ -1114,8 +1114,8 @@ function renderRows(list) {
     document.getElementById('KidsRow').innerHTML  = src.filter(m=>m.category==='kids').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
     document.getElementById('horrorRow').innerHTML  = src.filter(m=>m.category==='horror').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
     document.getElementById('classicRow').innerHTML  = src.filter(m=>m.category==='classic').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
-    document.getElementById('evilRow').innerHTML  = src.filter(m=>m.category==='evil').map(buildCard).join('')    || '<p style="color:var(--muted);padding:20px">No results found</p>';
-    document.getElementById('featuredRow').innerHTML = src.filter(m=>m.category==='80').map(buildLandscapeCard).join('') || '';
+    document.getElementById('evilRow').innerHTML = src.filter(m => m.category === 'evil').map(buildCard).join('') || '<p style="color:var(--muted);padding:20px">No results found</p>';
+    document.getElementById('80Row').innerHTML = src.filter(m=>m.category==='80').map(buildLandscapeCard).join('') || '';
   } else {
     const gridContainer = document.getElementById('viewAllGridContainer');
     const filteredMovies = src.filter(m => m.category === currentViewAllCat);
