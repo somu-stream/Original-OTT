@@ -475,9 +475,7 @@
             
             // அக்கவுண்ட் கிரியேட் ஆனதும் டைரக்டா ஹோம் பக்கத்துக்கே கூட்டிட்டு போயிடும்
             window.location.replace('home(1).html'); 
-          } else {
-            showNotification("Error!", true);
-          }
+          } 
         } else {
           const u = document.querySelector('input[name="username"]').value, p = document.querySelector('input[name="password"]').value;
           const res = await fetch(SHEETDB_API_URL);
