@@ -17,7 +17,7 @@ function startIntroRedirectLogic() {
 
     // 4.5 seconds la window replace use panni history lock panrom
     redirectTimeout = setTimeout(function() {
-        window.location.replace('auth.html');
+        window.location.replace('auth1.html');
     }, 5000);
 
   } else {
